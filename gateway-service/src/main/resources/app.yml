@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: clients-srv
+          uri:
+            http://localhost:8050/
+          predicates:
+            - Path=/clients/**
+        - id: products-srv
+          uri:
+            http://localhost:8060/
+          predicates:
+            - Path=/products/**
+
+        - id: sales-srv
+          uri:
+            http://localhost:8070/
+          predicates:
+            - Path=/sales/**
