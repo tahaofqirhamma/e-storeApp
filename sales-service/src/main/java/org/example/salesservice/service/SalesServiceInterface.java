@@ -11,4 +11,6 @@ public interface SalesServiceInterface {
     public void addSale(Sale sale);
     public void updateSale(Integer id, Sale sale);
     public void deleteSale(Integer id);
+    public void updateStatus(Integer id, String status);
+    public List<Sale> getMySales(String clientID);
 }

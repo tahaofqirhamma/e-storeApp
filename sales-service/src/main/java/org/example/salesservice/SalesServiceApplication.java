@@ -24,7 +24,7 @@ public class SalesServiceApplication {
     @Bean
     CommandLineRunner commandLineRunner(SalesRepository salesRepository){
         return args -> {
-            Sale sale = Sale.builder().saleDate(new Date()).clientId(1).productId(1).build();
+            Sale sale = Sale.builder().saleDate(new Date()).clientId("15cba452-642a-432e-a8db-a038a7bbd263").productId(1).saleQuantity(3).build();
             salesRepository.save(sale);
         };
     }

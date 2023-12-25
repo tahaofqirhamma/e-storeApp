@@ -14,8 +14,10 @@ public class Sale {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer saleId;
     private Date saleDate;
-    private Integer clientId;
+    private String clientId;
     private Integer productId;
+    private String status;
+    private Integer saleQuantity;
     @Transient
     private Client client;
     @Transient

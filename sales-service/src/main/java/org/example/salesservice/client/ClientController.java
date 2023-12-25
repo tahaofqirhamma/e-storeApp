@@ -12,6 +12,6 @@ public interface ClientController {
     @GetMapping("/clients")
     public List<Client> getAllClients();
     @GetMapping("/clients/{id}")
-    public Client getClient(@PathVariable("id") Integer id);
+    public Client getClient(@PathVariable("id") String id);
 
 }

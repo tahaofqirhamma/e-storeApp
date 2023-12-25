@@ -21,7 +21,7 @@ public class ClientService implements ClientServiceInterface{
     }
 
     @Override
-    public Client getClient(Integer id) {
+    public Client getClient(String id) {
         return clientRepository.findById(id).get();
     }
 
@@ -30,8 +30,10 @@ public class ClientService implements ClientServiceInterface{
         clientRepository.save(client);
     }
 
+
+
     @Override
-    public void updateClient(Client clientReq, Integer id) {
+    public void updateClient(Client clientReq, String id) {
 
       Client client = clientRepository.findById(id).get();
         if(clientReq.getFullName() != null) client.setFullName(clientReq.getFullName());
@@ -39,7 +41,7 @@ public class ClientService implements ClientServiceInterface{
     }
 
     @Override
-    public void deleteClient(Integer id) {
+    public void deleteClient(String id) {
         clientRepository.deleteById(id);
     }
 }

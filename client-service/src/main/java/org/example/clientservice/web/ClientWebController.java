@@ -21,7 +21,7 @@ public class    ClientWebController {
     }
 
     @GetMapping("/clients/{id}")
-    public Client getClient(@PathVariable("id") Integer id){
+    public Client getClient(@PathVariable("id") String id){
         return clientServiceInterface.getClient(id);
     }
 
@@ -31,12 +31,12 @@ public class    ClientWebController {
     }
 
     @PutMapping("/clients/{id}")
-    public void updateClient(@PathVariable("id") Integer id,@RequestBody Client client){
+    public void updateClient(@PathVariable("id") String id,@RequestBody Client client){
         clientServiceInterface.updateClient(client,id);
     }
 
     @DeleteMapping("/clients/{id}")
-    public void deleteClient(@PathVariable Integer id){
+    public void deleteClient(@PathVariable String id){
         clientServiceInterface.deleteClient(id);
     }
 

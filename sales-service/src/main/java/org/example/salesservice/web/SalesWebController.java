@@ -29,11 +29,24 @@ public class SalesWebController {
 
     @PostMapping("/sales")
     public void addSale(@RequestBody Sale saleReq){
-        Sale sale = new Sale();
-        sale.setClientId(saleReq.getClientId());
-        sale.setProductId(saleReq.getProductId());
-        sale.setSaleDate(saleReq.getSaleDate());
-        salesRepository.save(sale);
+       salesServiceInterface.addSale(saleReq);
 
     }
+
+    @PutMapping("/sale/{saleId}")
+    public void updateSaleStatus(@PathVariable Integer saleId, @RequestBody String status){
+        salesServiceInterface.updateStatus(saleId, status);
+    }
+
+    @DeleteMapping("/sales/{saleId}")
+    public void deleteSale(@PathVariable Integer saleId){
+        salesServiceInterface.deleteSale(saleId);
+    }
+
+   @GetMapping("/sales/{clientId}")
+    public List<Sale> getMySales(@PathVariable String clientId){
+       return  salesServiceInterface.getMySales(clientId);
+
+   }
+
 }

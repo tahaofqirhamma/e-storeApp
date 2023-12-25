@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Client {
-    private Integer clientId;
+    private String clientId;
     private String FullName;
     private String Address;
     private Integer productId;

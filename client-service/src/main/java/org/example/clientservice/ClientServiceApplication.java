@@ -9,6 +9,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+
+import java.util.UUID;
+
 @EnableConfigurationProperties({GlobalConfig.class, ClinetConfig.class})
 @SpringBootApplication
 
@@ -22,31 +25,31 @@ public class ClientServiceApplication {
     CommandLineRunner commandLineRunner(ClientRepository clientRepository) {
         return args -> {
             // Client 1
-            Client client1 = Client.builder().Address("Rabat, Morocco").FullName("Taha ofqir-hamma").productId(1).build();
+            Client client1 = Client.builder().clientId("15cba452-642a-432e-a8db-a038a7bbd263").Address("Rabat, Morocco").FullName("Taha ofqir-hamma").productId(1).build();
             clientRepository.save(client1);
 
             // Client 2
-            Client client2 = Client.builder().Address("Casablanca, Morocco").FullName("John Doe").productId(2).build();
+            Client client2 = Client.builder().clientId(UUID.randomUUID().toString()).Address("Casablanca, Morocco").FullName("John Doe").productId(2).build();
             clientRepository.save(client2);
 
             // Client 3
-            Client client3 = Client.builder().Address("Marrakech, Morocco").FullName("Jane Smith").productId(3).build();
+            Client client3 = Client.builder().clientId(UUID.randomUUID().toString()).Address("Marrakech, Morocco").FullName("Jane Smith").productId(3).build();
             clientRepository.save(client3);
 
             // Client 4
-            Client client4 = Client.builder().Address("Fes, Morocco").FullName("Ahmed Khalid").productId(4).build();
+            Client client4 = Client.builder().clientId(UUID.randomUUID().toString()).Address("Fes, Morocco").FullName("Ahmed Khalid").productId(4).build();
             clientRepository.save(client4);
 
             // Client 5
-            Client client5 = Client.builder().Address("Tangier, Morocco").FullName("Fatima Ali").productId(5).build();
+            Client client5 = Client.builder().clientId(UUID.randomUUID().toString()).Address("Tangier, Morocco").FullName("Fatima Ali").productId(5).build();
             clientRepository.save(client5);
 
             // Client 6
-            Client client6 = Client.builder().Address("Agadir, Morocco").FullName("Sara Hassan").productId(6).build();
+            Client client6 = Client.builder().clientId(UUID.randomUUID().toString()).Address("Agadir, Morocco").FullName("Sara Hassan").productId(6).build();
             clientRepository.save(client6);
 
             // Client 7
-            Client client7 = Client.builder().Address("Fez, Morocco").FullName("Omar Ahmed").productId(7).build();
+            Client client7 = Client.builder().clientId(UUID.randomUUID().toString()).Address("Fez, Morocco").FullName("Omar Ahmed").productId(7).build();
             clientRepository.save(client7);
         };
     }
