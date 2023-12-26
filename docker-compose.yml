@@ -27,7 +27,11 @@
       depends_on:
         e-store-discovery-service:
           condition: service_healthy
-
+    e-store-rabbitmq:
+      image: "rabbitmq:management"
+      ports:
+        - "5672:5672"
+        - "15672:15672"
     e-store-product-service:
       build: ./product-service
       ports:
@@ -41,7 +45,8 @@
       depends_on:
         e-store-config-service:
           condition: service_healthy
-
+      deploy:
+        replicas: 2
     e-store-client-service:
       build: ./client-service
       container_name: e-store-client-service
@@ -93,3 +98,7 @@
         - '5173:5173'
       expose:
         - '5173'
+      depends_on:
+        e-store-product-service:
+          condition: service_healthy
+
