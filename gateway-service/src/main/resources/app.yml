@@ -18,3 +18,9 @@ spring:
             http://localhost:8070/
           predicates:
             - Path=/sales/**
+
+        - id: notification-srv
+          uri:
+            http://localhost:8040/
+          predicates:
+            - Path=/notifications/**

@@ -5,9 +5,11 @@ import org.example.salesservice.Model.Client;
 import org.example.salesservice.Model.Product;
 import org.example.salesservice.client.ClientController;
 import org.example.salesservice.entities.Sale;
+import org.example.salesservice.event.SaleEvent;
 import org.example.salesservice.product.ProdcutController;
 import org.example.salesservice.repositories.SalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +28,12 @@ public class SalesService implements SalesServiceInterface{
     ClientController clientController;
     @Autowired
     ProdcutController prodcutController;
+
+    @Autowired
+    KafkaTemplate<String, SaleEvent> template;
+
+
+
     @Override
     public List<Sale> getAllSales() {
         List<Sale> sales = salesRepository.findAll();
@@ -51,7 +59,6 @@ public class SalesService implements SalesServiceInterface{
         Sale sale1 = new Sale();
         Client client = clientController.getClient(sale.getClientId());
         Product product = prodcutController.getProduct(sale.getProductId());
-        product.setQuantity(product.getQuantity() - sale.getSaleQuantity());
         sale1.setStatus("pending");
         sale1.setSaleDate(sale.getSaleDate());
         sale1.setSaleQuantity(sale.getSaleQuantity());
@@ -60,6 +67,7 @@ public class SalesService implements SalesServiceInterface{
         sale1.setClient(client);
         sale1.setProduct(product);
         salesRepository.save(sale1);
+        template.send("notificationTopic", new SaleEvent(sale1.getSaleId(),sale1.getClientId(), sale1.getProductId() ));
     }
 
     @Override
