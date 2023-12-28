@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,7 +68,7 @@ public class SalesService implements SalesServiceInterface{
         sale1.setClient(client);
         sale1.setProduct(product);
         salesRepository.save(sale1);
-        template.send("notificationTopic", new SaleEvent(sale1.getSaleId(),sale1.getClientId(), sale1.getProductId() ));
+        template.send("notificationTopic", new SaleEvent(sale1.getSaleId(),sale1.getClientId(), product.getProductId() ));
     }
 
     @Override
@@ -91,12 +92,12 @@ public class SalesService implements SalesServiceInterface{
 
     @Override
     public List<Sale> getMySales(String clientID) {
-       List<Sale> sales = salesRepository.findAll();
-        List<Sale> clientSale = sales.stream()
+       List<Sale> sales = getAllSales();
+        List<Sale> clientSales = sales.stream()
                 .filter(sale -> sale.getClientId().equals(clientID))
-                .toList();
+                .collect(Collectors.toList());
 
-        return clientSale;
+        return clientSales;
     }
 
 

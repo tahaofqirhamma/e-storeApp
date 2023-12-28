@@ -36,7 +36,9 @@ public class ProductService implements ProductServiceInterface{
         if(productReq.getProductName() != null) product.setProductName(productReq.getProductName());
         if(productReq.getProductPrice() != null) product.setProductPrice(productReq.getProductPrice());
         if(productReq.getIsInStock() != null) product.setIsInStock(productReq.getIsInStock());
-        if(productReq.getIsInStock() == false) product.setQuantity(0);
+        if(productReq.getQuantity() != null) product.setQuantity(product.getQuantity());
+        if(!product.getIsInStock()) product.setQuantity(0);
+
 
     }
 

@@ -9,6 +9,5 @@ public class Client {
     private String clientId;
     private String FullName;
     private String Address;
-    private Integer productId;
 
 }

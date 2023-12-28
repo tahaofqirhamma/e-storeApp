@@ -19,4 +19,12 @@ public class NotificationWeb {
     public List<Notification> getNotifications(){
       return notificationRepository.findAll();
     }
+    @GetMapping("/last-notification")
+    public Notification getLastNotification() {
+        List<Notification> allNotifications = getNotifications();
+        int size = allNotifications.size();
+
+        // Return the last notification if the list is not empty
+        return size > 0 ? allNotifications.get(size - 1) : null;
+    }
 }
