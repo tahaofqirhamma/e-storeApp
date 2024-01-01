@@ -29,7 +29,7 @@ public class ClientServiceApplication {
             clientRepository.save(client1);
 
             // Client 2
-            Client client2 = Client.builder().clientId("59116fea-b555-4a1b-8814-e5484b20946e").Address("Casablanca, Morocco").FullName("John Doe").build();
+            Client client2 = Client.builder().clientId("939e52c6-cea4-4948-aa6f-ac54c6c44335").Address("Casablanca, Morocco").FullName("Yassine ofh").build();
             clientRepository.save(client2);
 
             // Client 3

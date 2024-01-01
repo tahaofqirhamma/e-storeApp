@@ -1,17 +1,35 @@
-# services:
-#   # e-store-discovery-service:
-#   #   build: ./discovery-service
-#   #   container_name: e-store-discovery-service
-#   #   ports:
-#   #     - '8761:8761'
-#   #   expose:
-#   #     - '8761'
-#   #   healthcheck:
-#   #     test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
-#   #     interval: 10s
-#   #     retries: 4
+version: '3'
+services:
+  e-store-discovery-service:
+    build: ./discovery-service
+    container_name: e-store-discovery-service
+    ports:
+      - '8761:8761'
+    expose:
+      - '8761'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      retries: 4
 
-#   # e-store-config-service:
+  e-store-config-service:
+    build: ./config-service
+    container_name: e-store-config-service
+    ports:
+      - '9999:9999'
+    expose:
+      - '9999'
+    environment:
+      - DISCOVERY_SERVICE_URL=http://e-store-discovery-service:8761/eureka
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9999/actuator/health" ]
+      interval: 10s
+      retries: 4
+    depends_on:
+      e-store-discovery-service:
+        condition: service_healthy
+
+  #   # e-store-config-service:
 #   #   build: ./config-service
 #   #   container_name: e-store-config-service
 #   #   ports:
@@ -27,14 +45,23 @@
 #   #   depends_on:
 #   #     e-store-discovery-service:
 #   #       condition: service_healthy
+  e-store-product-service:
+    build: ./product-service
+    ports:
+      - '8060'
+    environment:
+      - DISCOVERY_SERVICE_URL=http://e-store-discovery-service:8761/eureka
+      - CONFIG_SERVICE_URL=http://e-store-config-service:9999
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8060/actuator/health" ]
+      interval: 10s
+    depends_on:
+      e-store-config-service:
+        condition: service_healthy
+   #deploy:
+     # replicas: 2
 
-#   # e-store-rabbitmq:
-#   #   image: "rabbitmq:management"
-#   #   ports:
-#   #     - "5672:5672"
-#   #     - "15672:15672"
-
-#   # e-store-product-service:
+  #   # e-store-product-service:
 #   #   build: ./product-service
 #   #   ports:
 #   #     - '8060'
@@ -50,7 +77,24 @@
 #   #   deploy:
 #   #     replicas: 2
 
-#   # e-store-client-service:
+  e-store-client-service:
+    build: ./client-service
+    container_name: e-store-client-service
+    ports:
+      - '8050:8050'
+    expose:
+      - '8050'
+    environment:
+      - DISCOVERY_SERVICE_URL=http://e-store-discovery-service:8761/eureka
+      - CONFIG_SERVICE_URL=http://e-store-config-service:9999
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8050/actuator/health" ]
+      interval: 10s
+    depends_on:
+      e-store-product-service:
+        condition: service_healthy
+
+  #   # e-store-client-service:
 #   #   build: ./client-service
 #   #   container_name: e-store-client-service
 #   #   ports:
@@ -66,8 +110,36 @@
 #   #   depends_on:
 #   #     e-store-product-service:
 #   #       condition: service_healthy
+  e-store-sales-service:
+    build: ./sales-service
+    container_name: e-store-sales-service
+    ports:
+      - '8070:8070'
+    expose:
+      - '8070'
+    environment:
+      - DISCOVERY_SERVICE_URL=http://e-store-discovery-service:8761/eureka
+      - CONFIG_SERVICE_URL=http://e-store-config-service:9999
+    depends_on:
+      e-store-client-service:
+        condition: service_healthy
 
-#   # e-store-sales-service:
+  e-store-notifications-service:
+    build: ./notification-service
+    container_name: e-store-notifications-service
+    ports:
+      - '8040:8040'
+    expose:
+      - '8040'
+    environment:
+      - DISCOVERY_SERVICE_URL=http://e-store-discovery-service:8761/eureka
+      - CONFIG_SERVICE_URL=http://e-store-config-service:9999
+    depends_on:
+      e-store-product-service:
+        condition: service_healthy
+
+
+  #   # e-store-sales-service:
 #   #   build: ./sales-service
 #   #   container_name: e-store-sales-service
 #   #   ports:
@@ -80,33 +152,34 @@
 #   #   depends_on:
 #   #     e-store-client-service:
 #   #       condition: service_healthy
+  e-store-gateway-service:
+    build: ./gateway-service
+    container_name: e-store-gateway-service
+    ports:
+      - '8888:8888'
+    expose:
+      - '8888'
+    environment:
+      - DISCOVERY_SERVICE_URL=http://e-store-discovery-service:8761/eureka
+      - CONFIG_SERVICE_URL=http://e-store-config-service:9999
+    depends_on:
+      e-store-config-service:
+        condition: service_healthy
 
-#   # e-store-gateway-service:
-#   #   build: ./gateway-service
-#   #   container_name: e-store-gateway-service
-#   #   ports:
-#   #     - '8888:8888'
-#   #   expose:
-#   #     - '8888'
-#   #   environment:
-#   #     - DISCOVERY_SERVICE_URL=http://e-store-discovery-service:8761/eureka
-#   #     - CONFIG_SERVICE_URL=http://e-store-config-service:9999
-#   #   depends_on:
-#   #     e-store-config-service:
-#   #       condition: service_healthy
 
-#   # e-store-reactapp:
-#   #   build: ./e-store-react-app
-#   #   container_name: e-store-reactapp
-#   #   ports:
-#   #     - '5173:5173'
-#   #   expose:
-#   #     - '5173'
-#   #   depends_on:
-#   #     e-store-product-service:
-#   #       condition: service_healthy
-version: '3'
-services:
+
+  e-store-reactapp:
+    build: ./e-store-react-app
+    container_name: e-store-reactapp
+    ports:
+      - '5173:5173'
+    expose:
+      - '5173'
+    depends_on:
+      e-store-product-service:
+        condition: service_healthy
+
+
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     environment:
@@ -132,8 +205,8 @@ services:
   keycloak:
       image: quay.io/keycloak/keycloak
       environment:
-        KEYCLOAK_ADMIN: tahaadmin
-        KEYCLOAK_ADMIN_PASSWORD: taha
+        KEYCLOAK_ADMIN:
+        KEYCLOAK_ADMIN_PASSWORD:
       command: [ "start-dev", "--import-realm" ]
       volumes:
             - ./realm/:/opt/keycloak/data/import/
